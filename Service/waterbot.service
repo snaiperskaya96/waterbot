@@ -3,7 +3,7 @@ Description=Waterbot daemon
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/Waterbot -daemon
+ExecStart=/usr/local/bin/WaterBot -daemon
 
 [Install]
 WantedBy=multi-user.target

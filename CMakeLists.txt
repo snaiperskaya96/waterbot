@@ -6,8 +6,9 @@ set(CMAKE_CXX_STANDARD 11)
 option(DEBUG "Prints debugging information." OFF)
 option(RASPI "If OFF do not compile raspi's specific libraries (WiringPi) and use random values instead." ON)
 
-set(WATERBOT_CONF_DIR "/etc/WaterBot/")
-set(SYSTEMD_UNIT_DIR "/usr/lib/systemd/system/")
+set(WATERBOT_BIN_DIR "/usr/local/bin")
+set(WATERBOT_CONF_DIR "/etc/WaterBot")
+set(SYSTEMD_UNIT_DIR "/usr/lib/systemd/system")
 set(ADDITIONAL_LIBRARIES)
 set(ADDITIONAL_INCLUDES)
 
@@ -67,5 +68,6 @@ endfunction(install_conf)
 
 
 install(DIRECTORY DESTINATION /etc/WaterBot)
+install(TARGETS WaterBot DESTINATION /usr/local/bin)
 install_conf(./WaterBot.ini ${WATERBOT_CONF_DIR})
 install_conf(./Service/waterbot.service ${SYSTEMD_UNIT_DIR})
