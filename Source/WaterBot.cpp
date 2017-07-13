@@ -10,6 +10,8 @@
 #include <Input/InputParser.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <cstring>
+#include <sys/signal.h>
 
 #ifdef WATERBOT_RASPI
 #include <wiringPi.h>
