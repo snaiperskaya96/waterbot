@@ -9,7 +9,7 @@ option(RASPI "If OFF do not compile raspi's specific libraries (WiringPi) and us
 set(WATERBOT_BIN_DIR "/usr/local/bin")
 set(WATERBOT_CONF_DIR "/etc/WaterBot")
 set(SYSTEMD_UNIT_DIR "/usr/lib/systemd/system")
-set(ADDITIONAL_LIBRARIES)
+set(ADDITIONAL_LIBRARIES pthread dl)
 set(ADDITIONAL_INCLUDES)
 
 if(RASPI)
@@ -33,7 +33,8 @@ set(SOURCE_FILES
         Source/Plant/Plant.h Source/Plant/Plant.cpp Source/Http/Http.cpp Source/Http/Http.h
         Source/Utils/restclient-cpp/connection.cc Source/Utils/restclient-cpp/connection.h
         Source/Utils/restclient-cpp/helpers.cc Source/Utils/restclient-cpp/helpers.h
-        Source/Utils/restclient-cpp/restclient.cc Source/Utils/restclient-cpp/restclient.h Source/WaterBot.h Source/Utils/Input/InputParser.h)
+        Source/Utils/restclient-cpp/restclient.cc Source/Utils/restclient-cpp/restclient.h Source/WaterBot.h
+        Source/Utils/Input/InputParser.h Source/Utils/Log/loguru.h)
 
 add_executable(WaterBot ${SOURCE_FILES})
 target_link_libraries(WaterBot ${CURL_LIBRARIES} ${ADDITIONAL_LIBRARIES})

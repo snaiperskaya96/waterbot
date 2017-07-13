@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <cstring>
 #include <sys/signal.h>
+#include <Log/loguru.h>
 
 #ifdef WATERBOT_RASPI
 #include <wiringPi.h>
@@ -59,14 +60,23 @@ int main(int ArgC, char** ArgV)
     }
 
     if (Parser.ArgumentExists("-daemon")) {
-        WDEBUG("Daemonising process\n");
-        Daemonise();
         ConfigPath = "/etc/WaterBot/WaterBot.ini";
     }
 
     if (Parser.ArgumentExists("--config")) {
         ConfigPath = Parser.GetArgumentAsString("--config");
     }
+
+    WaterBotConfig Conf = Config::ReadConfig(ConfigPath);
+
+    if (Parser.ArgumentExists("-daemon")) {
+        loguru::init(ArgC, ArgV);
+        loguru::add_file("/var/log/waterbot.log", loguru::Append, Conf.GetDaemonLogVerbosity());
+        WDEBUG("Daemonising process\n");
+        Daemonise();
+        ConfigPath = "/etc/WaterBot/WaterBot.ini";
+    }
+
 
 #ifdef WATERBOT_RASPI
     wiringPiSetup();
@@ -75,7 +85,6 @@ int main(int ArgC, char** ArgV)
 
     WDEBUG("WaterBot Debugging enabled.\n");
 
-    WaterBotConfig Conf = Config::ReadConfig(ConfigPath);
     Http::GetInstance().SetConfig(&Conf);
     Http::GetInstance().Init();
     RegisterPlants(Conf);
@@ -85,12 +94,14 @@ int main(int ArgC, char** ArgV)
 
 void Daemonise()
 {
+    LOG_SCOPE_FUNCTION(INFO);
     pid_t Pid = 0;
     int FileDescriptor;
 
     Pid = fork();
 
     if (Pid < 0) {
+        LOG_F(ERROR, "First fork failed. Pid < 0");
         exit(EXIT_FAILURE);
     }
 
@@ -99,6 +110,7 @@ void Daemonise()
     }
 
     if (setsid() < 0) {
+        LOG_F(ERROR, "First fork failed. setsid < 0");
         exit(EXIT_FAILURE);
     }
 
@@ -107,6 +119,7 @@ void Daemonise()
     Pid = fork();
 
     if (Pid < 0) {
+        LOG_F(ERROR, "Second fork failed. Pid < 0");
         exit(EXIT_FAILURE);
     }
 
@@ -134,11 +147,11 @@ void Daemonise()
         char PidString[256];
         PidFileDescriptor = open(PID_FILE_NAME, O_RDWR|O_CREAT, 0640);
         if (PidFileDescriptor < 0) {
-            /* Can't open lockfile */
+            LOG_F(ERROR, "Cannot open PID file");
             exit(EXIT_FAILURE);
         }
         if (lockf(PidFileDescriptor, F_TLOCK, 0) < 0) {
-            /* Can't lock file */
+            LOG_F(ERROR, "Cannot lock PID file");
             exit(EXIT_FAILURE);
         }
         /* Get current PID */

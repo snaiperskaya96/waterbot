@@ -15,8 +15,9 @@ public:
             std::string Host,
             std::string ApiKey,
             std::string UniqueName,
-            std::vector<Plant> Plants
-    ) : WATERBOT_HOST(Host), WATERBOT_API_KEY(ApiKey), WATERBOT_UNIQUE_NAME(UniqueName), WATERBOT_PLANTS(Plants) {}
+            std::vector<Plant> Plants,
+            int DaemonLogVerbosity
+    ) : WATERBOT_HOST(Host), WATERBOT_API_KEY(ApiKey), WATERBOT_UNIQUE_NAME(UniqueName), WATERBOT_PLANTS(Plants), DAEMON_LOG_VERBOSITY(DaemonLogVerbosity) {}
 
     const std::vector<Plant>& GetPlants() const {
         return WATERBOT_PLANTS;
@@ -34,11 +35,16 @@ public:
         return WATERBOT_UNIQUE_NAME;
     }
 
+    const int GetDaemonLogVerbosity() const {
+        return DAEMON_LOG_VERBOSITY;
+    }
+
 private:
     std::string WATERBOT_HOST;
     std::string WATERBOT_API_KEY;
     std::string WATERBOT_UNIQUE_NAME;
     std::vector<Plant> WATERBOT_PLANTS;
+    int DAEMON_LOG_VERBOSITY;
 };
 
 class Config {
@@ -48,6 +54,8 @@ public:
 };
 
 #define WATERBOT_CONFIG_FILE \
+"[Daemon]\n"\
+"LogVerbosity=3 ;0 to 9\n"\
 "[General]\n"\
 "BotName=Raspi\n"\
 "Host=;https://mywaterbot.com/\n"\

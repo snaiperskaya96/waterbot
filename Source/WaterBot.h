@@ -13,6 +13,8 @@
 #define WDEBUG(...)
 #endif
 
+#define LOGURU_IMPLEMENTATION 1
+
 #include <Plant/Plant.h>
 #include <vector>
 #include <Config/Config.h>

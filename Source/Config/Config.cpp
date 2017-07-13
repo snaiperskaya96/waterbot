@@ -31,7 +31,9 @@ WaterBotConfig Config::ReadConfig(std::string Path)
         Plants.push_back(MyPlant);
     }
 
-    return WaterBotConfig(Host, ApiKey, BotName, Plants);
+    int LogVerbosity = (int) Reader.GetInteger("Daemon", "LogVerbosity", 3);
+
+    return WaterBotConfig(Host, ApiKey, BotName, Plants, LogVerbosity);
 }
 
 void Config::GenerateConfigFile(std::string FilePath)
