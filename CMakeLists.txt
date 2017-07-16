@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(WaterBot)
 
 set(CMAKE_CXX_STANDARD 11)
+add_definitions("-std=c++11")
 
 option(DEBUG "Prints debugging information." OFF)
 option(RASPI "If OFF do not compile raspi's specific libraries (WiringPi) and use random values instead." ON)
