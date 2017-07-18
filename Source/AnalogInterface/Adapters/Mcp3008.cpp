@@ -4,6 +4,7 @@
 
 #include "Mcp3008.h"
 #ifdef WATERBOT_RASPI
+#include <Config/Config.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #endif
@@ -11,8 +12,8 @@
 
 void Mcp3008::Init(WaterBotConfig* Config)
 {
+    SpiChannel = Config::ReadCustomIntegerField("Mcp3008", "SpiChannel", 0);
 #ifdef WATERBOT_RASPI
-    SpiChannel = Config::ReadCustomField<int>("Mcp3008", "SpiChannel", 0);
     wiringPiSetup();
     wiringPiSPISetup(SpiChannel, 1000000);
 #endif

@@ -8,6 +8,10 @@
 #include <string>
 #include <vector>
 #include "Plant/Plant.h"
+#include <Utils/Ini/INIReader.h>
+#include <typeinfo>
+
+static std::string ConfigPath;
 
 struct WaterBotConfig {
 public:
@@ -60,9 +64,11 @@ public:
     static WaterBotConfig ReadConfig(std::string Path);
     static void GenerateConfigFile(std::string FilePath);
     template<typename T>
-    static T ReadCustomField(std::string Category, std::string Name, T Default);
-    static std::string GetConfig() { return Config::ConfigPath; }
-    static std::string ConfigPath;
+    static int ReadCustomIntegerField(std::string Category, std::string Name, T Default)
+    {
+        INIReader Reader(ConfigPath);
+        return (int) Reader.GetInteger(Category, Name, Default);
+    }
 };
 
 #define WATERBOT_CONFIG_FILE \
