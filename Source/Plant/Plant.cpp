@@ -5,6 +5,7 @@
  */
 
 #include <Http/Http.h>
+#include <AnalogInterface/AnalogInterface.h>
 #include "Plant.h"
 #ifdef WATERBOT_RASPI
 #include <wiringPi.h>
@@ -28,11 +29,7 @@ std::string Plant::GetName()
 
 void Plant::Update()
 {
-#ifdef WATERBOT_RASPI
-    int HumidityValue = analogRead(Pin);
-#else
-    int HumidityValue = 512;
-#endif
+    int HumidityValue = AnalogInterface::GetInstance().AnalogRead(Pin);
     HumidityPercentage = 100 - (100 * HumidityValue / 1024);
     Http::GetInstance().UpdatePlant(this);
 }

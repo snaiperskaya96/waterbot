@@ -16,8 +16,11 @@ public:
             std::string ApiKey,
             std::string UniqueName,
             std::vector<Plant> Plants,
-            int DaemonLogVerbosity
-    ) : WATERBOT_HOST(Host), WATERBOT_API_KEY(ApiKey), WATERBOT_UNIQUE_NAME(UniqueName), WATERBOT_PLANTS(Plants), DAEMON_LOG_VERBOSITY(DaemonLogVerbosity) {}
+            int DaemonLogVerbosity,
+            std::string AnalogInterface
+    ) : WATERBOT_HOST(Host), WATERBOT_API_KEY(ApiKey),
+        WATERBOT_UNIQUE_NAME(UniqueName), WATERBOT_PLANTS(Plants),
+        DAEMON_LOG_VERBOSITY(DaemonLogVerbosity), A_INTERFACE(AnalogInterface) {}
 
     const std::vector<Plant>& GetPlants() const {
         return WATERBOT_PLANTS;
@@ -39,23 +42,37 @@ public:
         return DAEMON_LOG_VERBOSITY;
     }
 
+    const std::string& GetAnalogInterface() const {
+        return A_INTERFACE;
+    }
+
 private:
     std::string WATERBOT_HOST;
     std::string WATERBOT_API_KEY;
     std::string WATERBOT_UNIQUE_NAME;
     std::vector<Plant> WATERBOT_PLANTS;
     int DAEMON_LOG_VERBOSITY;
+    std::string A_INTERFACE;
 };
 
 class Config {
 public:
     static WaterBotConfig ReadConfig(std::string Path);
     static void GenerateConfigFile(std::string FilePath);
+    template<typename T>
+    static T ReadCustomField(std::string Category, std::string Name, T Default);
+protected:
+    static const std::string ConfigPath;
 };
 
 #define WATERBOT_CONFIG_FILE \
 "[Daemon]\n"\
 "LogVerbosity=3 ;0 to 9\n"\
+"[Interface]\n"\
+";mcp3008/3004, and more to come maybe...\n"\
+"AnalogInterface=mcp3008\n"\
+"[Mcp3008]\n"\
+"SpiChannel=0\n"\
 "[General]\n"\
 "BotName=Raspi\n"\
 "Host=;https://mywaterbot.com/\n"\

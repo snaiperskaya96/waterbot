@@ -13,6 +13,7 @@
 #include <cstring>
 #include <sys/signal.h>
 #include <Log/loguru.h>
+#include <AnalogInterface/AnalogInterface.h>
 
 #ifdef WATERBOT_RASPI
 #include <wiringPi.h>
@@ -68,6 +69,8 @@ int main(int ArgC, char** ArgV)
     }
 
     WaterBotConfig Conf = Config::ReadConfig(ConfigPath);
+
+    AnalogInterface::GetInstance().SetConfig(&Conf);
 
     if (Parser.ArgumentExists("-daemon")) {
         loguru::init(ArgC, ArgV);

@@ -34,7 +34,9 @@ set(SOURCE_FILES
         Source/Utils/restclient-cpp/connection.cc Source/Utils/restclient-cpp/connection.h
         Source/Utils/restclient-cpp/helpers.cc Source/Utils/restclient-cpp/helpers.h
         Source/Utils/restclient-cpp/restclient.cc Source/Utils/restclient-cpp/restclient.h Source/WaterBot.h
-        Source/Utils/Input/InputParser.h Source/Utils/Log/loguru.h)
+        Source/Utils/Input/InputParser.h Source/Utils/Log/loguru.h Source/AnalogInterface/AnalogDeviceInterface.h
+        Source/AnalogInterface/Adapters/Mcp3008.cpp Source/AnalogInterface/Adapters/Mcp3008.h
+        Source/AnalogInterface/AnalogInterface.cpp Source/AnalogInterface/AnalogInterface.h)
 
 add_executable(WaterBot ${SOURCE_FILES})
 target_link_libraries(WaterBot ${CURL_LIBRARIES} ${ADDITIONAL_LIBRARIES})
