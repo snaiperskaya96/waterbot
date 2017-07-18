@@ -12,10 +12,9 @@
 void Mcp3008::Init(WaterBotConfig* Config)
 {
 #ifdef WATERBOT_RASPI
-    SpiChannel = Config::ReadCustomField("Mcp3008", "SpiChannel", 0);
-    loadSpiDriver();
+    SpiChannel = Config::ReadCustomField<int>("Mcp3008", "SpiChannel", 0);
     wiringPiSetup();
-    spiSetup(SpiChannel);
+    wiringPiSPISetup(SpiChannel, 1000000);
 #endif
 }
 

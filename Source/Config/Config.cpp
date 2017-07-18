@@ -6,11 +6,12 @@
 #include <vector>
 #include <sys/stat.h>
 #include <fstream>
+#include <typeinfo>
 #include "Config.h"
 
 WaterBotConfig Config::ReadConfig(std::string Path)
 {
-    const std::string ConfigPath = Path;
+    Config::ConfigPath = Path;
     INIReader Reader(ConfigPath);
     if (Reader.ParseError() < 0) {
         printf("Couldn't find %s. Make sure to run WaterBot --generate-config.\n", ConfigPath.c_str());
@@ -60,7 +61,7 @@ void Config::GenerateConfigFile(std::string FilePath)
 template<typename T>
 T Config::ReadCustomField(std::string Category, std::string Name, T Default)
 {
-    INIReader Reader(ConfigPath);
+    INIReader Reader(Config::GetConfigPath());
     if (Reader.ParseError() < 0) {
         printf("Couldn't find %s. Make sure to run WaterBot --generate-config.\n", ConfigPath.c_str());
         exit(1);

@@ -61,8 +61,8 @@ public:
     static void GenerateConfigFile(std::string FilePath);
     template<typename T>
     static T ReadCustomField(std::string Category, std::string Name, T Default);
-protected:
-    static const std::string ConfigPath;
+    static std::string GetConfig() { return Config::ConfigPath; }
+    static std::string ConfigPath;
 };
 
 #define WATERBOT_CONFIG_FILE \

@@ -3,6 +3,7 @@
 //
 
 #include <AnalogInterface/Adapters/Mcp3008.h>
+#include <stdexcept>
 #include "AnalogInterface.h"
 
 void AnalogInterface::Init()
