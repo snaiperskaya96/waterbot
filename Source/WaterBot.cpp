@@ -14,6 +14,7 @@
 #include <sys/signal.h>
 #include <Log/loguru.h>
 #include <AnalogInterface/AnalogInterface.h>
+#include <ThermometerInterface/ThermometerInterface.h>
 
 #ifdef WATERBOT_RASPI
 #include <wiringPi.h>
@@ -77,19 +78,19 @@ int main(int ArgC, char** ArgV)
         loguru::add_file("/var/log/waterbot.log", loguru::Append, Conf.GetDaemonLogVerbosity());
         WDEBUG("Daemonising process\n");
         Daemonise();
-        ConfigPath = "/etc/WaterBot/WaterBot.ini";
     }
-
 
 #ifdef WATERBOT_RASPI
     wiringPiSetup();
 #endif
+
     printf("\nWaterBot v.%s started.\n", WATERBOT_VERSION);
 
     WDEBUG("WaterBot Debugging enabled.\n");
 
     Http::GetInstance().SetConfig(&Conf);
     Http::GetInstance().Init();
+    ThermometerInterface::GetInstance().SetConfig(&Conf);
     RegisterPlants(Conf);
     Loop(Conf);
     return 0;

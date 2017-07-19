@@ -7,33 +7,20 @@
 
 
 #include <Config/Config.h>
+#include <DeviceInterface/DeviceInterface.h>
 #include "AnalogDeviceInterface.h"
 
-class AnalogInterface
+class AnalogInterface : public DeviceInterface<AnalogInterface>
 {
 public:
-    static AnalogInterface& GetInstance()
-    {
-        static AnalogInterface Instance;
-        return Instance;
-    }
-    AnalogInterface(AnalogInterface const&) = delete;
-    void operator=(AnalogInterface const&) = delete;
-
-    void SetConfig(WaterBotConfig* Config)
-    {
-        this->Config = Config;
-        this->Init();
-    }
-
     int AnalogRead(int Pin);
+
 private:
-    void Init();
+    void Init() override;
+
 private:
-    WaterBotConfig* Config;
     AnalogDeviceInterface* Interface;
-private:
-    AnalogInterface() {};
+
 };
 
 

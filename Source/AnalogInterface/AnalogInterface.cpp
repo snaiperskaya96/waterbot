@@ -23,5 +23,5 @@ void AnalogInterface::Init()
 
 int AnalogInterface::AnalogRead(int Pin)
 {
-    return Interface->AnalogRead(Pin);
+     return Interface != nullptr ? Interface->AnalogRead(Pin) : 0;
 }

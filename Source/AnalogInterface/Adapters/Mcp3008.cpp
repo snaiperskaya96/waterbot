@@ -3,8 +3,8 @@
 //
 
 #include "Mcp3008.h"
-#ifdef WATERBOT_RASPI
 #include <Config/Config.h>
+#ifdef WATERBOT_RASPI
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #endif
@@ -21,6 +21,7 @@ void Mcp3008::Init(WaterBotConfig* Config)
 
 int Mcp3008::AnalogRead(int Pin)
 {
+    Pin --;
 #ifdef WATERBOT_RASPI
     if(Pin < 0 || Pin > 7) return -1;
     unsigned char Buffer[3] = {1};

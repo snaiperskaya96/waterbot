@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 3.0)
 project(WaterBot)
 
 set(CMAKE_CXX_STANDARD 11)
-add_definitions("-std=c++11")
 
 option(DEBUG "Prints debugging information." OFF)
+# You should turn this OFF if you are NOT compiling on a Raspberry, otherwise you can always clone the
+# WiringPi headers into your include directory to avoid build (but not linking!) errors.
 option(RASPI "If OFF do not compile raspi's specific libraries (WiringPi) and use random values instead." ON)
 
 set(WATERBOT_BIN_DIR "/usr/local/bin")
@@ -22,6 +23,7 @@ endif()
 if(DEBUG)
     message("Compiling using Debug configuration")
     add_definitions(-DWATERBOT_DEBUG)
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-g")
 endif()
 
 find_package(CURL REQUIRED)
@@ -37,7 +39,7 @@ set(SOURCE_FILES
         Source/Utils/restclient-cpp/restclient.cc Source/Utils/restclient-cpp/restclient.h Source/WaterBot.h
         Source/Utils/Input/InputParser.h Source/Utils/Log/loguru.h Source/AnalogInterface/AnalogDeviceInterface.h
         Source/AnalogInterface/Adapters/Mcp3008.cpp Source/AnalogInterface/Adapters/Mcp3008.h
-        Source/AnalogInterface/AnalogInterface.cpp Source/AnalogInterface/AnalogInterface.h)
+        Source/AnalogInterface/AnalogInterface.cpp Source/AnalogInterface/AnalogInterface.h Source/ThermometerInterface/ThermometerDeviceInterface.h Source/ThermometerInterface/ThermometerInterface.cpp Source/ThermometerInterface/ThermometerInterface.h Source/ThermometerInterface/Adapters/Dht22.cpp Source/ThermometerInterface/Adapters/Dht22.h Source/DeviceInterface/DeviceInterface.h Source/Utils/Utils.h)
 
 add_executable(WaterBot ${SOURCE_FILES})
 target_link_libraries(WaterBot ${CURL_LIBRARIES} ${ADDITIONAL_LIBRARIES})

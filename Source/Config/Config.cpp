@@ -35,7 +35,11 @@ WaterBotConfig Config::ReadConfig(std::string Path)
 
     std::string AnalogInterface = Reader.Get("Interface", "AnalogInterface", "");
 
-    return WaterBotConfig(Host, ApiKey, BotName, Plants, LogVerbosity, AnalogInterface);
+    WaterBotConfig Conf(Host, ApiKey, BotName, Plants, LogVerbosity, AnalogInterface);
+    Conf.Thermometer = Reader.GetBoolean("General", "Thermometer", false);
+    Conf.ThermometerInterface = Reader.Get("Interface", "ThermometerInterface", "");
+
+    return Conf;
 }
 
 void Config::GenerateConfigFile(std::string FilePath)
