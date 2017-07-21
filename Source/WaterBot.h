@@ -20,7 +20,6 @@
 #include <Config/Config.h>
 
 void Loop(WaterBotConfig Conf);
-void Delay(int Milis);
 void RegisterPlants(WaterBotConfig Conf);
 int main(int ArgC, char** ArgV);
 void Daemonise();

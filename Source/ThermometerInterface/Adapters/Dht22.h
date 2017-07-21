@@ -40,6 +40,8 @@ private:
     void Microsleep(int MicroSeconds);
 
     void MiliSleep(int NanoSeconds);
+
+    void RenewLastUpdate();
 };
 
 

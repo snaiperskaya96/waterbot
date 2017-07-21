@@ -15,9 +15,6 @@ Plant::Plant(std::string Name, int Pin)
 {
     this->Name = Name;
     this->Pin = Pin;
-#ifdef WATERBOT_RASPI
-    pinMode (Pin, INPUT) ;
-#endif
 }
 
 Plant::~Plant() {}

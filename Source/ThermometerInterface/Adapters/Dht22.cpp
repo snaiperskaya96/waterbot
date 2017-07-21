@@ -10,6 +10,21 @@
 #include <wiringPi.h>
 #endif
 
+#define MAX_LOOP_CYCLES 32000
+#define SHOULD_CONTINUE \
+LoopCounter = 0;\
+if (ShouldContinue) { \
+    RenewLastUpdate();\
+    continue;\
+};
+
+#define LOOP_CHECK \
+LoopCounter++;\
+if (LoopCounter > MAX_LOOP_CYCLES) {\
+    break;\
+}\
+
+
 void Dht22::Update()
 {
 
@@ -24,12 +39,22 @@ void Dht22::Init()
 }
 
 /**
+ * Sorry but UpdateLastUpdate was even more horrible than
+ * RenewLastUpdate...
+ */
+void Dht22::RenewLastUpdate()
+{
+    LastUpdate = duration_cast<seconds>(system_clock::now().time_since_epoch());
+}
+
+/**
  * https://cdn-shop.adafruit.com/datasheets/Digital+humidity+and+temperature+sensor+AM2302.pdf
  * What happens here is that when we send a start signal the DHT22 will respond back with a
  * 40 bit signal that reflects the actual humidity and temperature
  */
 void Dht22::RetrieveData()
 {
+    bool ShouldContinue = false;
     const struct timespec OneSecond = {1, 0};
     while (!ShouldStop) {
         if ((duration_cast<seconds>(system_clock::now().time_since_epoch()) - LastUpdate).count() < 60) {
@@ -42,6 +67,7 @@ void Dht22::RetrieveData()
         int LowSignalCounter = 0;
         int HighSignalCounter = 0;
         int ReceivedData[40];
+        int LoopCounter = 0;
 
         pullUpDnControl(4, PUD_UP);
 
@@ -56,18 +82,34 @@ void Dht22::RetrieveData()
         // Count how many cpu cycles it takes to change status
         // Keeping in mind that the first two responses from the
         // sensor take up to 80us each
-
         // pullup is on so ignore the first segnal we find
         // Ideally we want to add a timeout here so we don't
         // get stuck in any loop
-        while (digitalRead(4) == HIGH) {}
-        while (digitalRead(4) == LOW) LowSignalCounter++;
-        while (digitalRead(4) == HIGH) HighSignalCounter++;
-
+        while (digitalRead(4) == HIGH) {
+            LOOP_CHECK;
+        }
+        SHOULD_CONTINUE;
+        while (digitalRead(4) == LOW) {
+            LOOP_CHECK;
+            LowSignalCounter++;
+        }
+        SHOULD_CONTINUE;
+        while (digitalRead(4) == HIGH) {
+            LOOP_CHECK;
+            HighSignalCounter++;
+        }
+        SHOULD_CONTINUE;
         for (int i = 0; i < 40; i++) {
             int c = 0;
-            while (digitalRead(4) == LOW) {}
-            while (digitalRead(4) == HIGH) c++;
+            while (digitalRead(4) == LOW) {
+                LOOP_CHECK;
+            }
+            SHOULD_CONTINUE;
+            while (digitalRead(4) == HIGH) {
+                c++;
+                LOOP_CHECK;
+            }
+            SHOULD_CONTINUE;
             ReceivedData[i] = c;
         }
 

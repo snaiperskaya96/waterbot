@@ -29,18 +29,15 @@ void RegisterPlants(WaterBotConfig Conf)
     }
 }
 
-void Delay(int Milis)
-{
-    usleep ((useconds_t) (Milis * 1000));
-}
-
 void Loop(WaterBotConfig Conf)
 {
     while(true) {
         for (Plant MyPlant : Conf.GetPlants()) {
             MyPlant.Update();
         }
-        Delay(10000);
+#ifdef WATERBOT_RASPI
+        delay(10000);
+#endif
     }
 }
 
