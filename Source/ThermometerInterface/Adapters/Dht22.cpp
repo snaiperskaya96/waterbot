@@ -5,6 +5,7 @@
 #include "Dht22.h"
 #include <Config/Config.h>
 #include <Utils/Utils.h>
+#include <Http/Http.h>
 
 #ifdef WATERBOT_RASPI
 #include <wiringPi.h>
@@ -27,7 +28,15 @@ if (LoopCounter > MAX_LOOP_CYCLES) {\
 
 void Dht22::Update()
 {
+    std::map<std::string, std::string> Data;
+    Data["name"] = "dht22_temperature";
+    Data["value"] = std::to_string(Temperature);
+    Http::GetInstance().PostCustomData(Data);
 
+    Data.clear();
+    Data["name"] = "dht22_humidity";
+    Data["value"] = std::to_string(Humidity);
+    Http::GetInstance().PostCustomData(Data);
 }
 
 void Dht22::Init()
@@ -83,8 +92,6 @@ void Dht22::RetrieveData()
         // Keeping in mind that the first two responses from the
         // sensor take up to 80us each
         // pullup is on so ignore the first segnal we find
-        // Ideally we want to add a timeout here so we don't
-        // get stuck in any loop
         while (digitalRead(4) == HIGH) {
             LOOP_CHECK;
         }
@@ -122,8 +129,8 @@ void Dht22::RetrieveData()
             else BinaryString += "1";
         }
 
-        double Humidity = stoi(BinaryString.substr(0, 16), 0, 2) / 10;
-        double Temperature = stoi(BinaryString.substr(16, 16), 0, 2) / 10;
+        Humidity = stoi(BinaryString.substr(0, 16), 0, 2) / 10;
+        Temperature = stoi(BinaryString.substr(16, 16), 0, 2) / 10;
 #endif
         Utils::SetDefaultPriority();
         nanosleep(&TenSecond, NULL);

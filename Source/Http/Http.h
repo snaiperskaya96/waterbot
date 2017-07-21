@@ -9,6 +9,7 @@
 #include <Config/Config.h>
 #include <Utils/restclient-cpp/restclient.h>
 #include <Utils/restclient-cpp/connection.h>
+#include <map>
 
 class Http {
 public:
@@ -37,6 +38,7 @@ public:
 
     void RegisterPlant(Plant MyPlant);
     void UpdatePlant(Plant* MyPlant);
+    void PostCustomData(std::map<std::string, std::string> Data);
 
 private:
     WaterBotConfig* Config;

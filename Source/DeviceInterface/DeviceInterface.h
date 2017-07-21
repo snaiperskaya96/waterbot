@@ -28,6 +28,8 @@ public:
         Config = Configuration;
         Init();
     }
+
+    virtual void Update() {};
 private:
     virtual void Init() {};
 protected:

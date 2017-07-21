@@ -24,7 +24,6 @@ using namespace std::chrono;
 class Dht22 : public ThermometerDeviceInterface {
 private:
     seconds LastUpdate;
-    char SensorData[5];
     bool ShouldStop;
     int Pin;
     double Humidity;
@@ -37,10 +36,6 @@ public:
 
 private:
     void RetrieveData();
-    void Microsleep(int MicroSeconds);
-
-    void MiliSleep(int NanoSeconds);
-
     void RenewLastUpdate();
 };
 

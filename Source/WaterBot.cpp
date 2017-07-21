@@ -35,6 +35,7 @@ void Loop(WaterBotConfig Conf)
         for (Plant MyPlant : Conf.GetPlants()) {
             MyPlant.Update();
         }
+        ThermometerInterface::GetInstance().Update();
 #ifdef WATERBOT_RASPI
         delay(10000);
 #endif

@@ -16,4 +16,10 @@ void ThermometerInterface::Init()
     }
 }
 
+void ThermometerInterface::Update() {
+    if (Interface != nullptr) {
+        Interface->Update();
+    }
+}
+
 

@@ -12,6 +12,8 @@
 #include "ThermometerDeviceInterface.h"
 
 class ThermometerInterface : public DeviceInterface<ThermometerInterface> {
+public:
+    void Update() override;
 private:
     std::thread UpdateThread;
     void Init() override;
