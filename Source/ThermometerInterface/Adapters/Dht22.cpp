@@ -55,10 +55,10 @@ void Dht22::RenewLastUpdate()
 void Dht22::RetrieveData()
 {
     bool ShouldContinue = false;
-    const struct timespec OneSecond = {1, 0};
+    const struct timespec TenSecond = {10, 0};
     while (!ShouldStop) {
         if ((duration_cast<seconds>(system_clock::now().time_since_epoch()) - LastUpdate).count() < 60) {
-            nanosleep(&OneSecond, NULL);
+            nanosleep(&TenSecond, NULL);
             continue;
         }
 
@@ -126,5 +126,6 @@ void Dht22::RetrieveData()
         double Temperature = stoi(BinaryString.substr(16, 16), 0, 2) / 10;
 #endif
         Utils::SetDefaultPriority();
+        nanosleep(&TenSecond, NULL);
     }
 }
