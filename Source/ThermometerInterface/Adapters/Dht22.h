@@ -27,6 +27,8 @@ private:
     char SensorData[5];
     bool ShouldStop;
     int Pin;
+    double Humidity;
+    double Temperature;
     std::thread UpdateThread;
 public:
     void Update() override;
@@ -35,10 +37,6 @@ public:
 
 private:
     void RetrieveData();
-    bool ExpectSignal(int Type, int MicroSeconds);
-
-    void WaitForSignalChange(int CurrentType, int Timeout);
-
     void Microsleep(int MicroSeconds);
 
     void MiliSleep(int NanoSeconds);
