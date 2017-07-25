@@ -129,8 +129,18 @@ void Dht22::RetrieveData()
             else BinaryString += "1";
         }
 
-        Humidity = stoi(BinaryString.substr(0, 16), 0, 2) / 10;
-        Temperature = stoi(BinaryString.substr(16, 16), 0, 2) / 10;
+        /**
+        * Makes sure the checksum is correct, if not do not assign any value
+        */
+        std::string BinarySum;
+        for (int I = 0; I < 16; I++) {
+            if (BinaryString.at(I) == BinaryString.at(I + 16)) BinarySum += "1";
+            else BinaryString += "0";
+        }
+        if (BinaryString.substr(32, 8) == BinarySum.substr(8, 8)) {
+            Humidity = stoi(BinaryString.substr(0, 16), 0, 2) / 10;
+            Temperature = stoi(BinaryString.substr(16, 16), 0, 2) / 10;
+        }
 #endif
         Utils::SetDefaultPriority();
         nanosleep(&TenSecond, NULL);
