@@ -133,10 +133,31 @@ void Dht22::RetrieveData()
         * Makes sure the checksum is correct, if not do not assign any value
         */
         std::string BinarySum;
-        for (int I = 0; I < 16; I++) {
-            if (BinaryString.at(I) == BinaryString.at(I + 16)) BinarySum += "1";
-            else BinaryString += "0";
+        bool HasRemainder = false;
+        for (int I = 15; I >= 0; I--) {
+            char A = BinaryString.at(I);
+            char B = BinaryString.at(I + 16);
+            char ToAdd;
+            if (A == '1' && B == '1') {
+                    ToAdd = '0';
+                    HasRemainder = true;
+            } else {
+                if (A == '1' || B == '1') {
+                    ToAdd = '1';
+                } else {
+                    ToAdd = '0';
+                }
+                HasRemainder = false;
+            }
+            if (ToAdd == '1' && HasRemainder) ToAdd = '0';
+            else if (ToAdd == '0' && HasRemainder) {
+                ToAdd = '1';
+                HasRemainder = false;
+            }
+
+            BinarySum.insert(0, 1, ToAdd);
         }
+        if (HasRemainder) BinarySum.insert(0, 1, '1');
         if (BinaryString.substr(32, 8) == BinarySum.substr(8, 8)) {
             Humidity = stoi(BinaryString.substr(0, 16), 0, 2) / 10;
             Temperature = stoi(BinaryString.substr(16, 16), 0, 2) / 10;
