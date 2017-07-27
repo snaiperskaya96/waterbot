@@ -1,3 +1,5 @@
+#### Have a look at this [article](https://blog.skayahack.com/building-a-watering-bot/) to have a general overview about WaterBot and what it does.
+
 Dependencies
 ------------
   - cmake
